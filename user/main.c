@@ -15,8 +15,8 @@
 #include "user_interface.h"
 #include "espconn.h"
 #include "mem.h"
-
 #include "output_protocols/ws2801.h"
+#include "output_protocols/ws2812.h"
 #include "input_protocols/artnet.h"
 #include "input_protocols/tpm2net.h"
 #include "config/httpd.h"
@@ -70,6 +70,7 @@ user_init()
 	config_load();
 
 	struct station_config stconf;
+	memset(&stconf, 0, sizeof(stconf));
 	strcpy((char *)stconf.ssid,WIFI_SSID);
 	strcpy((char *)stconf.password,WIFI_PASSWORD);
 
@@ -83,9 +84,11 @@ user_init()
 
 	wifi_station_set_config(&stconf);
 	wifi_station_set_auto_connect(1);
-
-    ws2801_init();
-
+#ifdef ENABLE_WS2812
+	ws2812_init();
+#else
+	ws2801_init();
+#endif
     //Wait for system to be done.
     system_init_done_cb(&system_is_done);
     //system_os_task()
