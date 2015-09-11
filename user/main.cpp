@@ -4,9 +4,8 @@
  *  Created on: Nov 15, 2014
  *      Author: frans-willem
  */
-
-
-#include <input_protocols/tpm2net.h>
+#include <sdkfixup.h>
+extern "C" {
 #include "ets_sys.h"
 #include "osapi.h"
 #include "gpio.h"
@@ -15,6 +14,8 @@
 #include "user_interface.h"
 #include "espconn.h"
 #include "mem.h"
+}
+#include "input_protocols/tpm2net.h"
 #include "output_protocols/ws2801.h"
 #include "output_protocols/ws2812.h"
 #include "input_protocols/artnet.h"
@@ -22,7 +23,7 @@
 #include "config/httpd.h"
 #include "config/config.h"
 
-static volatile os_timer_t client_timer;
+static os_timer_t client_timer;
 static void ICACHE_FLASH_ATTR wait_for_ip(uint8 flag) {
     LOCAL struct ip_info ipconfig;
     LOCAL int status;
@@ -64,7 +65,7 @@ static void ICACHE_FLASH_ATTR system_is_done(void){
 }
 
 //Init function
-void ICACHE_FLASH_ATTR
+extern "C" void ICACHE_FLASH_ATTR
 user_init()
 {
 	config_load();
